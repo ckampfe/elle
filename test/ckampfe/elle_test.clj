@@ -1,6 +1,6 @@
-(ns elle.core-test
+(ns ckampfe.elle-test
   (:require [clojure.test :refer :all]
-            [elle.core :refer :all]))
+            [ckampfe.elle :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
