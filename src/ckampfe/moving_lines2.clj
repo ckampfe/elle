@@ -1,4 +1,4 @@
-(ns ckampfe.moving-lines
+(ns ckampfe.moving-lines2
   (:require [quil.core :as q]))
 
 (defn pendulum [min-dim max-dim tick-size]
@@ -23,15 +23,19 @@
 (defn setup []
   (q/background 255)
   (q/no-stroke)
-  (q/no-loop))
+  #_(q/frame-rate 1)
+  (q/no-loop)
+  )
+
+#_(def runs (atom 1))
 
 (defn draw []
   (q/fill 100 100 100)
 
-  (let [x1 (pendulum 40 520 14)
-        x2 (pendulum 680 1160 6)
-        y1 (pendulum 50 350 20)
-        y2 (pendulum 400 700 7)
+  (let [x1 (pendulum 40 1160 6)
+        ;; x2 (pendulum 680 1160 6)
+        y1 (pendulum 50 750 7)
+        ;; y2 (pendulum 400 700 7)
         ;; pendulums [x1 x2 y1 y2]
 
        ;;  x1s (map (fn [_] (:position (x1)))
@@ -60,16 +64,30 @@
     #_(doseq [pair-list [x1y1 x2y1 x1y2 x2y2]
               [[x1 y1] [x2 y2]] (partition 2 1 pair-list)]
         (q/line x1 y1 x2 y1))
-
-    (dotimes [n 1080]
+    #_(dotimes [n @runs]
       (let [x1t (:position (x1))
-            x2t (:position (x2))
+           x2t (:position (x2))
+           y1t (:position (y1))
+           y2t (:position (y2))]
+       (q/ellipse x1t y1t 4 4)
+       (q/ellipse x1t y2t 4 4)
+       (q/ellipse x2t y1t 4 4)
+       (q/ellipse x2t y2t 4 4)))
+
+    #_(swap! runs inc)
+
+    (dotimes [n 3380]
+      (let [x1t (:position (x1))
+            ;; x2t (:position (x2))
             y1t (:position (y1))
-            y2t (:position (y2))]
-        (q/ellipse x1t y1t 4 4)
-        (q/ellipse x1t y2t 4 4)
-        (q/ellipse x2t y1t 4 4)
-        (q/ellipse x2t y2t 4 4)))))
+            ;; ky2t (:position (y2))
+            ]
+        (q/ellipse x1t y1t 5 5)
+        ;; (q/ellipse x1t y2t 4 4)
+        #_(q/ellipse x2t y1t 4 4)
+        #_(q/ellipse x2t y2t 4 4)
+
+        ))))
 
 (try (q/defsketch example
        :title "pendulums"
@@ -77,8 +95,8 @@
        :setup setup
        :draw draw
        :size [1200 800]
-       ;; :renderer :svg
-       ;; :output-file "moving-lines-1.svg"
+       :renderer :svg
+       :output-file "moving-lines-3.svg"
        :features [:no-bind-output])
      (catch Exception e
        (println e)))

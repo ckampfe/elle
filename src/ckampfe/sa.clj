@@ -70,11 +70,10 @@
                           (if (and (< distance qmax)
                                    (> distance qmin))
                             3
-                            0
-                            )
+                            0)
                           #_(cond (> distance qmax) (Math/floor distance)
-                                (< distance qmin) 30
-                                :else 0))
+                                  (< distance qmin) 30
+                                  :else 0))
 
           ;; c-score (count (filter d-fn c-distances))
           ;; m-score (count (filter d-fn m-distances))
@@ -167,7 +166,7 @@
   energy-s and energy-new-s are both floats, the consine sim of target and state (or new prospective state)"
   [energy-s energy-new-s temperature]
   (let [;; normalized (- energy-s energy-new-s)
-]
+        ]
     (if #_(< energy-s energy-new-s)
       (< energy-new-s energy-s)
       1.1
@@ -175,8 +174,8 @@
                         energy-s)
                      temperature))
       #_(- 1 (Math/pow (/ (- energy-s energy-new-s)
-                        energy-s)
-                     temperature)))))
+                          energy-s)
+                       temperature)))))
 
 #_(defn random-new-neighbor [s temperature energy-fn]
     (let [s-energy (energy-fn s)
@@ -246,7 +245,6 @@
                                               energy-s-new
                                               temperature)]
 
-
                 (if (and (> ap this-rand)
                          #_(not= s (reverse s-new))
                          #_(not= s (rseq (vec s-new)))
@@ -258,7 +256,7 @@
                     (println "ap:" ap)
                     (println "this rand:" this-rand)
                     [(conj acc [s-new energy-s-new])
-                    s-new])
+                     s-new])
                   [acc s])))
             [[] initial-s]
             (range kmax))))
@@ -270,39 +268,80 @@
     :y [250 200 10 190]
     :k [0 0 0 45]))
 
+#_(defn colormod [[r g b]]
+    [(mod (* 9 (bit-xor r 100)) 255)
+     (mod (* 9 (bit-xor g 40)) 255)
+     (mod (* 9 (bit-xor b 40)) 255)])
+
+(defn colormod [[r g b]]
+  [(Math/abs ^int (int (Math/ceil (* 1.05 (- r 280)))))
+   (Math/abs ^int (int (Math/ceil (* 0.9 (- g 255)))))
+   (Math/abs ^int (int (Math/ceil (* 1.0 (- b 290)))))])
+
 (defn draw []
   (q/no-stroke)
 
-  (let [[sims initial-sim] (simulated-annealing (new-matrix 15 15) 10000)]
-    (doall (map-indexed (fn [col-number part]
-                          (doall (map-indexed (fn [row-number [s energy]]
-                                                (let [adjx (+ 40 (* row-number 230))
-                                                      adjy (+ 20 (* col-number 220))]
-                                                  (q/with-fill [200 200 200]
-                                                    (q/text (.toString energy)
-                                                            (+ 10  adjx)
-                                                            (+ 7 adjy)))
-                                                  (doall (map-indexed (fn [y points-row]
+  #_(Math/pow 2 24)
 
-                                                                        (doall (map-indexed (fn [x color]
-                                                                                              (q/with-fill (fill-for color)
-                                                                                                (q/rect (+ (* 10 (+ 1 x)) adjx)
-                                                                                                        (+ (* 10 (+ 1 y)) adjy)
-                                                                                                        10
-                                                                                                        10)))
-                                                                                            points-row)))
-                                                                      (partition (:height s)
-                                                                                 (:data s))))))
-                                              part)))
-                        #_[(take 1 (reverse sims))]
-                        (->> sims
-                             reverse
-                             #_(take 15)
-                             (take-nth 300)
-                             reverse
-                             (partition-all 4)
-                             (take 3))
-                        #_(partition 5 (reverse (take 15 (reverse sims))))))))
+  (let [colors (map (fn [a b c]
+                      [a b c])
+                    (range 50 256 5)
+                    (range 50 256 37)
+                    (range 50 256 29))
+                ;; ]
+        modded (map colormod colors)]
+
+    (doall (map (fn [color modcolor distance]
+                  (q/with-fill color
+                    (q/rect 80 distance 40 40))
+                  (q/with-fill modcolor
+                    (q/rect 140 distance 40 40)))
+
+                colors
+                modded
+                (range 80 1000 80)))
+
+    (comment
+
+      (println [r1 g1 b1])
+      (println [r2 g2 b2])
+
+      (q/with-fill [r1 g1 b1]
+        (q/rect 80 80 40 40))
+
+      (q/with-fill [r2 g2 b2]
+        (q/rect 200 80 40 40))))
+
+  #_(let [[sims initial-sim] (simulated-annealing (new-matrix 15 15) 10000)]
+      (doall (map-indexed (fn [col-number part]
+                            (doall (map-indexed (fn [row-number [s energy]]
+                                                  (let [adjx (+ 40 (* row-number 230))
+                                                        adjy (+ 20 (* col-number 220))]
+                                                    (q/with-fill [200 200 200]
+                                                      (q/text (.toString energy)
+                                                              (+ 10  adjx)
+                                                              (+ 7 adjy)))
+                                                    (doall (map-indexed (fn [y points-row]
+
+                                                                          (doall (map-indexed (fn [x color]
+                                                                                                (q/with-fill (fill-for color)
+                                                                                                  (q/rect (+ (* 10 (+ 1 x)) adjx)
+                                                                                                          (+ (* 10 (+ 1 y)) adjy)
+                                                                                                          10
+                                                                                                          10)))
+                                                                                              points-row)))
+                                                                        (partition (:height s)
+                                                                                   (:data s))))))
+                                                part)))
+                          #_[(take 1 (reverse sims))]
+                          (->> sims
+                               reverse
+                               #_(take 15)
+                               (take-nth 300)
+                               reverse
+                               (partition-all 4)
+                               (take 3))
+                          #_(partition 5 (reverse (take 15 (reverse sims))))))))
 
 (defn setup []
   (q/background 255)

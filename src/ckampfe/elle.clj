@@ -105,7 +105,7 @@
   ;; n = 5 : ABAABABAABAAB
   ;; n = 6 : ABAABABAABAABABAABABA
   ;; n = 7 : ABAABABAABAABABAABABAABAABABAABAAB 
-)
+  )
 
 (defn interp-retree [dragon]
   (let [angle (atom 0)
@@ -258,7 +258,7 @@
   energy-s and energy-new-s are both floats, the consine sim of target and state (or new prospective state)"
   [energy-s energy-new-s temperature]
   (let [;; normalized (- energy-s energy-new-s)
-]
+        ]
     (if (> energy-s energy-new-s)
       1.1
       (- 1 (Math/pow (/ (- energy-s energy-new-s)
@@ -314,8 +314,7 @@
                                (energy-fn s-new)))
                   [(conj acc [s-new (energy-fn s-new)])
                    s-new]
-                  [acc s]
-                  )))
+                  [acc s])))
             [[] initial-s]
             (range kmax))))
 
@@ -344,8 +343,7 @@
                 :y (* mag2 (- y2 y1))}
 
                {:x (* mag1 x1)
-                :y (* mag2 y1)}
-               ])
+                :y (* mag2 y1)}])
             (partition 2 1 adjusted-magnitudes))))
 
 (defmacro xor
@@ -423,13 +421,11 @@
 
 (defn f13 [[a b c]]
   (nand (xor a c)
-        (nand b c))
-  )
+        (nand b c)))
 
 (defn f14 [[a b c]]
   (xor (xor a c)
-       (nor b c))
-  )
+       (nor b c)))
 
 (defn draw []
   #_(q/no-fill)
@@ -476,11 +472,10 @@
         ]
 
     #_(x/view
-     (x/xy-chart
-      {"energy" {:x (range (count (map second (first sims))))
-                 :y (map second (first sims))}}
-      {:title "ok"}))
-
+       (x/xy-chart
+        {"energy" {:x (range (count (map second (first sims))))
+                   :y (map second (first sims))}}
+        {:title "ok"}))
 
     (println (count (first sims)))
     (doall (map-indexed (fn [k part]
@@ -495,24 +490,22 @@
                                                                         ;; (let [adj (* (+ j 1) 120)
                                                                         + adj ;;       adjy (* (+ k 1) 110)]
                                                                         #_(q/ellipse (+ adj x) (+ adjy y)
-                                                                                   2 2)
+                                                                                     2 2)
                                                                         #_(q/ellipse (+ adj x2) (+ adjy y2)
-                                                                                   2 2)
+                                                                                     2 2)
                                                                         (q/curve
 
                                                                          (+ (* 70 (rand)) (+ adj x))
                                                                          (+ (* 70 (rand)) (+ adjy y))
-                                                                                (+ adj x)
-                                                                                (+ adjy y)
-                                                                                (+ adj x2)
-                                                                                (+ adjy y2)
-                                                                                (+ (* 70 (rand)) (+ adj x2))
-                                                                                (+ (* 70 (rand)) (+ adjy y2))
-
-
-                                                                                )
+                                                                         (+ adj x)
+                                                                         (+ adjy y)
+                                                                         (+ adj x2)
+                                                                         (+ adjy y2)
+                                                                         (+ (* 70 (rand)) (+ adj x2))
+                                                                         (+ (* 70 (rand)) (+ adjy y2)))
                                                                         ;; )
-)
+                                                                        )
+
                                                                       s))))
                                               part)))
                         (take 3 (partition-all 4 (reverse (take 50 (reverse (first sims)))))))))
@@ -527,11 +520,11 @@
                                                              (< y (- 800 20))
                                                              (> y 20))
                                                     #_(q/line (* 10 (+ 1 (- 117 j)))
-                                                            (* 10 (+ 1 (- 78 i)))
-                                                            (* 10 (+ 1 (- 117 j)))
-                                                            (+ 5 (* 10 (+ 1 (- 78 i))))
-                                                            #_10
-                                                            #_10)
+                                                              (* 10 (+ 1 (- 78 i)))
+                                                              (* 10 (+ 1 (- 117 j)))
+                                                              (+ 5 (* 10 (+ 1 (- 78 i))))
+                                                              #_10
+                                                              #_10)
                                                     (q/rect (* 10 (+ 1 (- 117 j)))
                                                             (* 10 (+ 1 (- 78 i)))
                                                             10
@@ -597,18 +590,18 @@
                                                   "x"))))))
 
 (try (q/defsketch example
-       :title "elle"
-       :settings #(q/smooth 1)
-       :setup setup
-       :draw draw
-       :size [1200 800]
-       :renderer :svg
-       :output-file "shortpath6.svg"
-       :features [:no-bind-output])
-     (catch Exception e
-       (println e)))
+         :title "elle"
+         :settings #(q/smooth 1)
+         :setup setup
+         :draw draw
+         :size [1200 800]
+         :renderer :svg
+         :output-file "shortpath6.svg"
+         :features [:no-bind-output])
+       (catch Exception e
+         (println e)))
 
-#_(defn -main
+(defn -main
     "I don't do a whole lot ... yet."
     [& args]
     (println "Hello, World!"))
