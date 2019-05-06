@@ -1,5 +1,7 @@
-(ns ckampfe.moving-lines2
+(ns ckampfe.moving-lines4
   (:require [quil.core :as q]))
+
+
 
 (defn pendulum [min-dim max-dim tick-size]
   (let [state (atom {:position min-dim
@@ -32,7 +34,8 @@
 (defn draw []
   #_(q/fill 100 100 100)
 
-  (let [x1 (pendulum 40 1160 6)
+  (let [x1 (pendulum 40 1160 1)
+        ;; x1 (pendulum 50 750 1)
         ;; x2 (pendulum 680 1160 6)
         y1 (pendulum 50 750 7)
         ;; y2 (pendulum 400 700 7)
@@ -42,7 +45,11 @@
                 (fn [i]
                   [(:position (x1)) (:position (y1))])
 
-                (range 4500))]
+                #_(range 6400)
+                (range 10600)
+                #_(range 9900)
+
+                )]
 
     #_(println (take 5 points))
 
@@ -76,8 +83,8 @@
        :setup setup
        :draw draw
        :size [1200 800]
-       ;; :renderer :svg
-       ;; :output-file "moving-lines-4.svg"
+       :renderer :svg
+       :output-file "moving-lines-4.svg"
        :features [:no-bind-output])
      (catch Exception e
        (println e)))
