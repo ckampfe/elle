@@ -6,6 +6,7 @@
         com.hypirion/clj-xchart {:mvn/version "0.2.0"}
         net.mikera/core.matrix {:mvn/version "0.62.0"}
         net.mikera/vectorz-clj {:mvn/version "0.48.0"}
+        org.clojure/data.xml {:mvn/version "0.2.0-alpha6"}
         }
  :aliases
  {:more-mem {:jvm-opts ["-Xmx12G -Xms12G"]} ;; lol
